@@ -1,0 +1,64 @@
+name: remote-rundeck-plugin
+rundeckPluginVersion: 1.2
+author: "Cody Ernesti"
+date: 2021-03-03
+version: "0.1"
+tags:
+  - script
+providers:
+  - name: remote-rundeck-node-executor
+    service: WorkflowNodeStep
+    title: Remote-Rundeck / Node Executor
+    description: 'execute the specified job on the remote server'
+    plugin-type: script
+    script-interpreter: python3 -u
+    script-file: node-executor.py
+    script-args: ${node.name}
+    config:
+      - name: id
+        type: String
+        title: "Job ID"
+        description: "GUID of the job to be ran on the remote server"
+        required: true
+        renderingOptions:
+          groupName: Config
+      - name: options
+        type: String
+        title: "Job Options"
+        description: "Job options to be passed to the remote server in JSON format"
+        required: false
+        renderingOptions:
+          groupName: Config
+      - name: url
+        type: String
+        title: "Rundeck URL"
+        description: "URL of the remote server"
+        required: true
+        default: "http://127.0.0.1:4440"
+        renderingOptions:
+          groupName: Config
+      - name: token
+        type: String
+        title: "API Token"
+        required: true
+        description: "Rundeck API Token"
+        renderingOptions:
+          groupName: Authentication
+          selectionAccessor: "STORAGE_PATH"
+          valueConversion: "STORAGE_PATH_AUTOMATIC_READ"
+          storage-path-root: "keys"
+      - name: version
+        type: Integer
+        title: "API Version"
+        description: "Rundeck API Version"
+        required: false
+        default: 18
+        renderingOptions:
+          groupName: Config
+      - name: verify_ssl
+        type: Boolean
+        title: "Verify ssl"
+        description: "Verify ssl for SSL connections"
+        required: false
+        renderingOptions:
+          groupName: Authentication
